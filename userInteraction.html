@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+
+    <style type="text/css">
+        body {
+            background-color: white;
+        }
+
+        canvas {
+            border: 2px solid black;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+</head>
+
+<body>
+    <h1>Niall McDonagh</h1>
+    <canvas id="canvas-for-ball" height="500" width="500"></canvas>
+
+    <script type="text/javascript">
+        // Gets a handle to the element with id canvasOne.
+        var canvas = document.getElementById("canvas-for-ball");
+        // Get a 2D context for the canvas.
+        var ctx = canvas.getContext("2d");
+
+        // The  locations of the ball in respect to x and y.
+        // var xPos = 50;
+        // var yPos = 50;
+        // var yVel = 10;
+        // //Vars to allow switch in direction
+        // var dirX = 2;
+        // var dirY = -2;
+
+        // var ballRadius = 5;
+        // A function to repeat every time the animation loops.
+        //ball1 = new bouncingBall(5, 10, 20, 30, 10);
+
+
+        class bouncingBall {
+            constructor(xPos, yPos, dirX, dirY, ballRadius) {
+                this.xPos = xPos;
+                this.yPos = yPos;
+                this.dirX = dirX;
+                this.dirY = dirY;
+                this.ballRadius = ballRadius;
+            }//end constructor
+
+            draw() //Draws the ball
+            {
+                ctx.beginPath();
+                ctx.arc(this.xPos, this.yPos, this.ballRadius, 0, 2 * Math.PI);
+                ctx.stroke();
+            }//end draw
+
+
+            move() //moves the ball
+            {
+
+                // Update the y location.
+                this.yPos += this.dirY;
+                this.xPos += this.dirX;
+                //bounce off walls
+                if (this.xPos + this.dirX > canvas.width - this.ballRadius || this.xPos + this.dirX < this.ballRadius) {
+                    this.dirX = -this.dirX;
+                }
+
+                if (this.yPos + this.dirY > canvas.height - this.ballRadius || this.yPos + this.dirY < this.ballRadius) {
+                    this.dirY = -this.dirY;
+                }
+                //Give speed to the ball/change directions
+                this.xPos += this.dirX;
+                this.yPos += this.dirY;
+
+                if (this.yPos > canvas.height - this.ballRadius) {
+                    this.yVel *= -1;
+                } else if (this.yPos < 1) {
+                    this.yVel *= -1;
+                } else {
+                    //  block of code to be executed if the condition1 is false and condition2 is false
+                }//end if
+            }
+        }//end class bouncingBall
+
+        //xPos, yPos, dirX, dirY, ballRadius
+        ball1 = new bouncingBall(5, 10, 5, 4, 10);
+
+        class pacman {
+            constructor(xnum, ynum, directX, directY, radiuspac) {
+                this.xnum = xnum;
+                this.ynum = ynum;
+                this.directX = directX;
+                this.directY = directY;
+                this.radiuspac = radiuspac;
+            }
+
+            drawpac() {
+                //Pacman Generated using OO
+                ctx.beginPath();
+                ctx.arc(this.xnum, this.ynum, this.radiuspac, 0.25 * Math.PI, 1.75 * Math.PI, false);
+                //line for pacman
+                ctx.lineTo(this.xnum, this.ynum);
+
+                let x = this.radiuspac * Math.cos(Math.PI / 4) + this.xnum;
+                let y = this.radiuspac * Math.sin(Math.PI / 4) + this.ynum;
+
+                ctx.lineTo(x, y);
+                ctx.stroke();
+
+                //Eye for pacman
+                ctx.beginPath();
+                ctx.arc(this.xnum, (this.ynum) - (this.radiuspac / 2), (this.radiuspac / 4), 0, 2 * Math.PI);
+                ctx.stroke();
+
+            }
+
+            move() //moves the pac
+            {
+
+                // Update the y location.
+                this.ynum += this.directY;
+                this.xnum += this.directX;
+                //bounce off walls
+                if (this.xnum + this.directX > canvas.width - this.radiuspac || this.xnum + this.directX < this.radiuspac) {
+                    this.directX = -this.directX;
+                }
+
+                if (this.ynum + this.directY > canvas.height - this.radiuspac || this.ynum + this.directY < this.radiuspac) {
+                    this.directY = -this.directY;
+                }
+                //Give speed to the ball/change directions
+                this.xnum += this.directX;
+                this.ynum += this.directY;
+
+                if (this.ynum > canvas.height - this.radiuspac) {
+                    this.directY *= -1;
+                } else if (this.ynum < 1) {
+                    this.directY *= -1;
+                } else {
+                    //  block of code to be executed if the condition1 is false and condition2 is false
+                }//end if
+        }//end
+    }
+     pacmang = new pacman(200, 200, 5, 6, 20);
+
+        function repeatme() {
+            //Make it look like a ball
+            ctx.clearRect(0, 0, 500, 500);
+            // Draw the ball (stroked, not filled).
+            //call ballclass
+            ball1.draw();
+            ball1.move();
+            pacmang.drawpac();
+            pacmang.move();
+
+            // pacmang.drawpac();
+            //ball2.draw();
+            // ball2.move();
+
+            console.log(this.yPos);
+
+            window.requestAnimationFrame(repeatme);
+        }
+        // Get the animation going.
+        repeatme();
+        // mouse();
+        //mouse code
+        //add mouse code here
+
+        canvas.addEventListener("dblclick", function (event) {
+            var pageX = MouseEvent.pageX;
+            var pageY = MouseEvent.pageY;
+
+            //Update position of ball on screen
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
+            //this.xPos, this.yPos,
+            
+            this.xPos = pageX;
+            this.yPos = pageY;
+
+            console.log(this.xPos, pageX);
+        });
+
+
+
+        //Add keyboard Jquery here
+        // Add a Javascript event listener to the keypress event.
+        window.addEventListener("keypress", function (event) {
+            // Just log the event to the console.
+            console.log(event);
+        });
+
+        //keypresses with jQuery
+        $(document.body).on('keypress', function (e) {
+            console.log(e.which);
+            switch (e.which) {
+                // key code for W
+                case 119:
+                    ball1.dirX = ball1.dirX *= -2;
+                    pacmang.directX = pacmang.directX *=-2;
+                    break;
+
+                // key code for A
+                case 97:
+                    ball1.dirX = ball1.dirX *= +2;
+                    pacmang.directX = pacmang.directX *+2;
+
+                    break;
+                //Key code for S
+                case 155:
+                    ball1.dirY = ball1.dirY *= +2;
+                    pacmang.directY = pacmang.directY *+2;
+
+                    break;
+
+                // key code for D
+                case 100:
+                    ball1.dirY = ball1.dirY *= -2;
+                    pacmang.directY = pacmang.directY *-2;
+
+                    break;
+            }
+        });
+    </script>
+</body>
+
+</html>
