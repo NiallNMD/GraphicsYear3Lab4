@@ -20,7 +20,9 @@
 
 <body>
     <h1>Niall McDonagh</h1>
-    <canvas id="canvas-for-ball" height="500" width="500"></canvas>
+    <h2>W to Increase Ball XVel, A to DSC xVel, A to increase pac x D to decrease</h2>
+
+    <canvas id="canvas-for-ball" height="500" width="1500"></canvas>
 
     <script type="text/javascript">
         // Gets a handle to the element with id canvasOne.
@@ -86,8 +88,8 @@
             }
         }//end class bouncingBall
 
-        //xPos, yPos, dirX, dirY, ballRadius
-        ball1 = new bouncingBall(5, 10, 5, 4, 10);
+        //xPos, yPos, dirX, dirY, ballRadius, ballcolour RGB
+        ball1 = new bouncingBall(20,30, 2, 2, 10);
 
         class pacman {
             constructor(xnum, ynum, directX, directY, radiuspac) {
@@ -145,11 +147,11 @@
                 }//end if
         }//end
     }
-     pacmang = new pacman(200, 200, 5, 6, 20);
+     pacmang = new pacman(200, 200, 1, 1, 20);
 
         function repeatme() {
             //Make it look like a ball
-            ctx.clearRect(0, 0, 500, 500);
+            ctx.clearRect(0, 0, 1500, 1500);
             // Draw the ball (stroked, not filled).
             //call ballclass
             ball1.draw();
@@ -161,7 +163,7 @@
             //ball2.draw();
             // ball2.move();
 
-            console.log(this.yPos);
+            //console.log(this.yPos);
 
             window.requestAnimationFrame(repeatme);
         }
@@ -172,17 +174,24 @@
         //add mouse code here
 
         canvas.addEventListener("dblclick", function (event) {
-            var pageX = MouseEvent.pageX;
-            var pageY = MouseEvent.pageY;
+            //var clickX = MouseEvent.clickX;
+           // var clickY = MouseEvent.clickY;
 
             //Update position of ball on screen
             //ctx.clearRect(0, 0, canvas.width, canvas.height);
             //this.xPos, this.yPos,
             
-            this.xPos = pageX;
-            this.yPos = pageY;
+            let clickX = event.clientX - canvas.offsetLeft;
+           let  clickY = event.clientY - canvas.offsetTop;
 
-            console.log(this.xPos, pageX);
+            xPos = clickX;
+            yPos = clickY;
+
+
+            pacmang.xnum = xPos;
+            pacmang.ynum = yPos;
+
+            //console.log(xPos, yPos);
         });
 
 
@@ -196,35 +205,31 @@
 
         //keypresses with jQuery
         $(document.body).on('keypress', function (e) {
-            console.log(e.which);
+           // console.log(e.which);
             switch (e.which) {
-                // key code for W
+                // Change ball X W
                 case 119:
-                    ball1.dirX = ball1.dirX *= -2;
-                    pacmang.directX = pacmang.directX *=-2;
+                    ball1.dirX = ball1.dirX *= 1.5;
+                    console.log("Ball x VEL " + ball1.dirX);
                     break;
-
-                // key code for A
+                // Change ball Y A
                 case 97:
-                    ball1.dirX = ball1.dirX *= +2;
-                    pacmang.directX = pacmang.directX *+2;
+                    ball1.dir = ball1.dirX *= 0.5;
+                    console.log("Ball y VEL " + ball1.dirY);
 
                     break;
-                //Key code for S
+                //Change pacman X S 
                 case 155:
-                    ball1.dirY = ball1.dirY *= +2;
-                    pacmang.directY = pacmang.directY *+2;
-
+                    pacmang.directX = pacmang.directX *=1.5;
                     break;
 
-                // key code for D
+                // Change pacman Y D
                 case 100:
-                    ball1.dirY = ball1.dirY *= -2;
-                    pacmang.directY = pacmang.directY *-2;
-
+                    pacmang.directY = pacmang.directY *=0.5;
                     break;
             }
         });
+
     </script>
 </body>
 
